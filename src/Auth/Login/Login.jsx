@@ -1,8 +1,14 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { FaGoogle } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     return (
+      <>
+      <Helmet>
+  <title>PlanNet|| Login Page</title>
+</Helmet>
         <div className='flex justify-center items-center min-h-screen bg-white'>
             <div className='flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900'>
               <div className='mb-8 text-center'>
@@ -44,12 +50,13 @@ const Login = () => {
               </div>
               <p className='px-6 text-sm text-center text-gray-400'>
                  Don&apos;t have an account yet?{''}
-                 <Link to='signup' className="hover:underline hover:text-lime-500 text-gray-600">
+                 <Link to='/signup' className="hover:underline hover:text-lime-500 text-gray-600">
                  Sign Up
                  </Link>
               </p>
             </div>
         </div>
+      </>
     );
 };
 

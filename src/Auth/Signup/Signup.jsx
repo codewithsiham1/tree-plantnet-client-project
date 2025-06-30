@@ -1,9 +1,14 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { FaGoogle } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 
 const Signup = () => {
     return (
+      <>
+            <Helmet>
+        <title>PlanNet|| Signup Page</title>
+      </Helmet>
         <div className='flex justify-center items-center min-h-screen bg-white'>
         <div className='flex flex-col p-6 max-w-md rounded-md sm:p-10 bg-gray-100 text-gray-900'>
         <div className='mb-8 text-center'>
@@ -58,6 +63,7 @@ const Signup = () => {
           </p>
         </div>
         </div>
+      </>
     );
 };
 
