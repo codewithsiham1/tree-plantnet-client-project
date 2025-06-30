@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { FaGoogle } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Authcontext } from '../../Provider/Authprovider';
+import { toast } from 'react-toastify';
 
 const Login = () => {
+  const {signIn}=useContext(Authcontext)
+  const navigate=useNavigate()
+  const handlelogin=(event)=>{
+    event.preventDefault()
+    const form=event.target
+    const email=form.email.value;
+    const password=form.password.value;
+    signIn(email,password)
+    .then((result)=>{
+      const logeduser=result.user
+         toast.success('Login successful!');
+         navigate('/')
+    })
+  }
     return (
       <>
       <Helmet>
@@ -15,7 +31,7 @@ const Login = () => {
             <h1 className='my-3 text-4xl font-bold'>Log In</h1>
             <p className='text-sm text-gray-400'> Sign in to access your account</p>
               </div>
-              <form action="" noValidate='' className='space-y-6 ng-untouched ng-pristine ng-valid'>
+              <form onSubmit={handlelogin} action="" noValidate='' className='space-y-6 ng-untouched ng-pristine ng-valid'>
                <div className='space-y-4'>
               <div>
                 <label htmlFor="email" className='block mb-2 text-sm'>

@@ -1,9 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { FaGoogle } from 'react-icons/fa6';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Authprovider, { Authcontext } from '../../Provider/Authprovider';
+import { toast } from 'react-toastify';
 
 const Signup = () => {
+  const {createuser,updateprofile}=useContext(Authcontext)
+  const navigate=useNavigate()
+  const handleSignup=(event)=>{
+    event.preventDefault();
+    const form=event.target;
+    const name=form.name.value;
+    const email=form.email.value;
+    const password=form.password.value;
+    console.log(name,email,password)
+   createuser(email, password)
+  .then((result) => {
+    const user = result.user;
+    form.reset();
+    toast.success('User registered successfully!');
+    
+    updateprofile({ displayName: name })  // ✅ only one object
+      .then(() => toast.success('Profile updated'))
+       navigate('/')
+      .catch((error) => toast.error(error.message));
+  })
+  .catch((error) => toast.error(error.message));
+
+  }
     return (
       <>
             <Helmet>
@@ -15,10 +40,10 @@ const Signup = () => {
                 <h1 className='my-3 text-4xl font-bold'>Sign Up</h1>
                 <p className='text-sm text-gray-400'>Welcome to PlantNet</p>
             </div>
-            <form className='space-y-6 ng-untouched ng-pristine ng-valid'>
+            <form onSubmit={handleSignup} className='space-y-6 ng-untouched ng-pristine ng-valid'>
           <div className='space-y-4'>
            <div>
-            <label htmlFor="email" className='block mb-2 text-sm'> Name</label>
+            <label htmlFor="name" className='block mb-2 text-sm'> Name</label>
             <input type="text" name='name'  id='name' placeholder='Enter Your Name Here' className=' w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-lime-500 bg-gray-200 text-gray-900' data-temp-mail-org='0'/>
            </div>
            <div>
