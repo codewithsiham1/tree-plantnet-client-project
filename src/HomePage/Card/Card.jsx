@@ -1,7 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Card = () => {
     return (
+     <Link to={`/plant/1`}  className='col-span-1 cursor-pointer group shadow-xl p-3 rounded-xl'>
         <div className='flex flex-col gap-2 w-full py-6'>
            <div className='aspect-square w-full relative overflow-hidden rounded-xl'>
             <img className='object-cover h-full w-full group-hover:scale-110 transition' src="https://i.ibb.co.com/rMHmQP2/money-plant-in-feng-shui-brings-luck.jpg" alt="Plant Image" />
@@ -17,6 +19,7 @@ const Card = () => {
               </div>
            </div>
         </div>
+     </Link>
     );
 };
 

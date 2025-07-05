@@ -4,31 +4,49 @@ import { FaGoogle } from 'react-icons/fa6';
 import { Link, useNavigate } from 'react-router-dom';
 import Authprovider, { Authcontext } from '../../Provider/Authprovider';
 import { toast } from 'react-toastify';
+import Useauth from '../../Hooks/Useauth';
 
 const Signup = () => {
   const {createuser,updateprofile}=useContext(Authcontext)
   const navigate=useNavigate()
-  const handleSignup=(event)=>{
-    event.preventDefault();
-    const form=event.target;
-    const name=form.name.value;
-    const email=form.email.value;
-    const password=form.password.value;
-    console.log(name,email,password)
-   createuser(email, password)
-  .then((result) => {
-    const user = result.user;
-    form.reset();
-    toast.success('User registered successfully!');
-    
-    updateprofile({ displayName: name })  // ✅ only one object
-      .then(() => toast.success('Profile updated'))
-       navigate('/')
-      .catch((error) => toast.error(error.message));
-  })
-  .catch((error) => toast.error(error.message));
+  const {user}=Useauth()
+const handleSignup = async (event) => {
+  event.preventDefault();
+  const form = event.target;
+  const name = form.name.value;
+  const email = form.email.value;
+  const password = form.password.value;
+  const imageFile = form.image.files[0]; // ✅ image name must match input
 
+  const formData = new FormData();
+  formData.append('image', imageFile);
+
+  try {
+    // ✅ Correct API endpoint usage with template string
+    const res = await fetch(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMG_KEY}`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await res.json();
+    const photoURL = data.data.display_url;
+
+    // ✅ Create user
+    const result = await createuser(email, password);
+    const user = result.user;
+
+    // ✅ Update profile with name and photoURL
+    await updateprofile(name, photoURL);
+
+    toast.success('User registered and profile updated!');
+    form.reset();
+    navigate('/');
+  } catch (error) {
+    toast.error(error.message);
   }
+};
+
+
     return (
       <>
             <Helmet>
