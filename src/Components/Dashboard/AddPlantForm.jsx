@@ -1,7 +1,52 @@
+import { useState } from "react"
+import { imageUpload } from "../../api/Utils"
+import Useauth from "../../Hooks/Useauth"
+import useAxiosSecure from "../../Hooks/useAxiosSecure/useAxiosSecure"
+import { toast } from "react-toastify"
+
 const AddPlantForm = () => {
+  const {user}=Useauth()
+  const [uploadButton,setUploadButton]=useState({name:"Upload-Image"})
+  const [loading,setloading]=useState(false)
+  const axiossecure=useAxiosSecure()
+  // form submit
+  const handlesubmit=async(e)=>{
+e.preventDefault()
+setloading(true)
+    const form = e.target
+    const name = form.name.value
+    const description = form.description.value
+    const category = form.category.value
+    const price = parseFloat(form.price.value)
+    const quantity = parseInt(form.quantity.value)
+    const image = form.image.files[0]
+    const imageUrl = await imageUpload(image)
+    // seller info
+    const seller={
+    name:user?.displayName,
+    image:user?.photoURL,
+    email:user?.email,
+    }
+    // create plant data object
+    const plantData={
+  name,description,category,price,quantity,image:imageUrl,seller
+    }
+    console.table(plantData)
+    // save plant in db
+    try{
+// post request
+const {data}=await axiossecure.post('/plants',plantData,{withCredentials:true,})
+toast.success('Data Added Succesfully')
+    }catch(err){
+      console.log(err)
+    }
+ finally{
+  setloading(false)
+ }
+  }
   return (
     <div className='w-full min-h-[calc(100vh-40px)] flex flex-col justify-center items-center text-gray-800 rounded-xl bg-gray-50'>
-      <form>
+      <form onSubmit={handlesubmit}>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-10'>
           <div className='space-y-6'>
             {/* Name */}
@@ -87,6 +132,7 @@ const AddPlantForm = () => {
                 <div className='flex flex-col w-max mx-auto text-center'>
                   <label>
                     <input
+                    onChange={(e)=>setUploadButton(e.target.files[0])}
                       className='text-sm cursor-pointer w-36 hidden'
                       type='file'
                       name='image'
@@ -95,7 +141,7 @@ const AddPlantForm = () => {
                       hidden
                     />
                     <div className='bg-lime-500 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-lime-500'>
-                      Upload
+                      {uploadButton.name}
                     </div>
                   </label>
                 </div>

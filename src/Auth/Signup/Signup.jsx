@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Authprovider, { Authcontext } from '../../Provider/Authprovider';
 import { toast } from 'react-toastify';
 import Useauth from '../../Hooks/Useauth';
+import axios from 'axios';
 
 const Signup = () => {
   const {createuser,updateprofile}=useContext(Authcontext)
@@ -33,11 +34,17 @@ const handleSignup = async (event) => {
 
     // ✅ Create user
     const result = await createuser(email, password);
-    const user = result.user;
+    const Createuser = result.user;
 
     // ✅ Update profile with name and photoURL
     await updateprofile(name, photoURL);
-
+    await axios.post(`${import.meta.env.VITE_API_URL}/user/${email}`, {
+        name,
+        image: photoURL,
+        email,
+      });
+// get jwt
+      await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, { email }, { withCredentials: true });
     toast.success('User registered and profile updated!');
     form.reset();
     navigate('/');

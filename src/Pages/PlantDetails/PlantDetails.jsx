@@ -4,27 +4,41 @@ import Container from '../../Shared/Container/Container';
 import Heading from '../../Shared/Heading/Heading';
 import PurchaseModal from '../../Modal/PurchaseModal';
 import Button from"../../Shared/Button/Button"
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 
 const PlantDetails = () => {
+  const {id}=useParams()
     const [isOpen,setIsOpen]=useState(false)
+    const {data:plant={},isLoading,refetch}=useQuery({
+    queryKey:['plant',id],
+    queryFn:async()=>{
+   const {data}=await axios(`${import.meta.env.VITE_API_URL}/plants/${id}`)
+   return data
+    }
+    })
+    console.log('Plant details:', plant);
+    const {name,category,quantity,price,image,_id,description,seller}=plant ||{}
     const closeModal=()=>{
         setIsOpen(false)
     }
+    if (isLoading) return <div>Loading...</div>
     return (
        <>
       <Container>
                <Helmet>
          <title>PlanNet || PlantNet Details</title>
        </Helmet>
-       <div className='mx-auto flex flex-col lg:flex-row justify-between w-full gap-12'>
+       <div className='mx-auto flex flex-col lg:flex-row justify-between w-full gap-12 p-20'>
         {/* Header */}
         <div className='flex flex-col gap-6 flex-1'>
           <div>
             <div className='w-full overflow-hidden rounded-xl'>
               <img
                 className='object-cover w-full'
-                src='https://i.ibb.co/DDnw6j9/1738597899-golden-money-plant.jpg'
+                src={image}
                 alt='header image'
               />
             </div>
@@ -33,17 +47,15 @@ const PlantDetails = () => {
         <div className='md:gap-10 flex-1'>
           {/* Plant Info */}
           <Heading
-            title={'Money Plant'}
-            subtitle={`Category: ${'Succulent'}`}
+            title={name}
+            subtitle={`Category: ${category}`} center={true}
           />
           <hr className='my-6' />
           <div
             className='
           text-lg font-light text-neutral-500'
           >
-            Professionally deliver sticky testing procedures for next-generation
-            portals. Objectively communicate just in time infrastructures
-            before.
+          {description}
           </div>
           <hr className='my-6' />
 
@@ -57,7 +69,7 @@ const PlantDetails = () => {
                 gap-2
               '
           >
-            <div>Seller:Moudud Ahamed Siham</div>
+            <div>Seller:{seller?.name}</div>
 
             <img
               className='rounded-full'
@@ -65,7 +77,7 @@ const PlantDetails = () => {
               width='30'
               alt='Avatar'
               referrerPolicy='no-referrer'
-              src='https://lh3.googleusercontent.com/a/ACg8ocKUMU3XIX-JSUB80Gj_bYIWfYudpibgdwZE1xqmAGxHASgdvCZZ=s96-c'
+              src={seller?.image}
             />
           </div>
           <hr className='my-6' />
@@ -77,19 +89,19 @@ const PlantDetails = () => {
                 text-neutral-500
               '
             >
-              Quantity: 10 Units Left Only!
+              Quantity: {quantity}
             </p>
           </div>
           <hr className='my-6' />
           <div className='flex justify-between'>
-            <p className='font-bold text-3xl text-gray-500'>Price: 10$</p>
+            <p className='font-bold text-3xl text-gray-500'>Price: {price}</p>
             <div>
-              <Button label='Purchase'  onClick={() => setIsOpen(true)}/>
+              <Button label={quantity>0?'purchase':'out of stock'}  onClick={() => setIsOpen(true)}/>
             </div>
           </div>
           <hr className='my-6' />
 
-          <PurchaseModal closeModal={closeModal} isOpen={isOpen} />
+          <PurchaseModal plant={plant} closeModal={closeModal} isOpen={isOpen} />
         </div>
       </div>
       </Container>
