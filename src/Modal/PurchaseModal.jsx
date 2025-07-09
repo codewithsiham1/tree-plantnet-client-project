@@ -13,7 +13,7 @@ import useAxiosSecure from '../Hooks/useAxiosSecure/useAxiosSecure'
 
 
 
-const PurchaseModal = ({ closeModal, isOpen,plant }) => {
+const PurchaseModal = ({ closeModal, isOpen,plant,refetch }) => {
    const {user}=Useauth()
    const {name,category,quantity,price,_id,seller}=plant ||{}
  const[totalQuantity,setTotalQuantity]=useState(1)
@@ -56,8 +56,10 @@ try{
   // save data in db
   await axiosSecure.post('/order',purchaseInfo)
   // decrase qunatity form plant collection
+await axiosSecure.patch(`/plants/quantity/${_id}`,{ quantityToUpdate: totalQuantity,status:'decrease' })
 
   toast.success('order successfull')
+  refetch()
 }catch(err){
 console.log(err)
 }finally{

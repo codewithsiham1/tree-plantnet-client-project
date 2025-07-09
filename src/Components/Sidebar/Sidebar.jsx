@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { GrLogout } from 'react-icons/gr'
 import { FcSettings } from 'react-icons/fc'
 import { AiOutlineBars } from 'react-icons/ai'
-import { BsGraphUp } from 'react-icons/bs'
+
 
 
 
@@ -17,14 +17,18 @@ import AdminMenu from '../AdminMenu/AdminMenu'
 import SellerMenu from '../SellerMenu/SellerMenu'
 import CustomerMenu from '../CustomerMenu/CustomerMenu'
 import MenuItem from '../MenuItem/MenuItem'
+import Userole from '../../Hooks/Userole/Userole'
 const Sidebar = () => {
   const { logOut } = Useauth()
   const [isActive, setActive] = useState(false)
-
+const [role,isLoading]=Userole()
   // Sidebar Responsive Handler
   const handleToggle = () => {
     setActive(!isActive)
   }
+  if (isLoading) {
+  return <div className='p-5'>Loading Sidebar...</div>
+}
   return (
     <>
       {/* Small Screen Navbar */}
@@ -76,15 +80,9 @@ const Sidebar = () => {
           <div className='flex flex-col justify-between flex-1 mt-6'>
             <nav>
               {/*  Menu Items */}
-              <CustomerMenu />
-              <SellerMenu />
-
-              <MenuItem
-                icon={BsGraphUp}
-                label='Statistics'
-                address='/dashboard'
-              />
-              <AdminMenu />
+             { role?.role==='customer' &&<CustomerMenu />}
+             {role?.role==='seller' &&<SellerMenu />}
+             { role?. role==='admin' &&<AdminMenu />}
             </nav>
           </div>
         </div>

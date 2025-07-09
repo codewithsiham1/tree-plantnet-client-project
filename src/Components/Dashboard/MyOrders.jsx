@@ -1,8 +1,25 @@
 import { Helmet } from 'react-helmet-async'
 import CustomerOrderDataRow from '../Form/CustomerOrderDataRow/CustomerOrderDataRow'
+import Useauth from '../../Hooks/Useauth'
+
+import { useQuery } from '@tanstack/react-query'
+import useAxiosSecure from '../../Hooks/useAxiosSecure/useAxiosSecure'
+import LoadingSpinner from '../../Shared/LoadingSpinner/LoadingSpinner'
+
 
 
 const MyOrders = () => {
+  const {user}=Useauth()
+  const axiosSecure=useAxiosSecure()
+   const {data:orders=[],isLoading,refetch}=useQuery({
+    queryKey:['orders',user?.email],
+    queryFn:async()=>{
+   const {data}=await axiosSecure(`/customer-orders/${user?.email}`)
+   return data
+    }
+    })
+    console.log("Orders data:", orders)
+    if(isLoading) return <LoadingSpinner></LoadingSpinner>
   return (
     <>
       <Helmet>
@@ -61,7 +78,10 @@ const MyOrders = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <CustomerOrderDataRow />
+                  {
+                    orders.map(orderData=><CustomerOrderDataRow refetch={refetch} key={orderData._id} orderData={orderData}/>)
+                  }
+                  
                 </tbody>
               </table>
             </div>

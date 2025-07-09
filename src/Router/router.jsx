@@ -5,13 +5,17 @@ import Signup from "../Auth/Signup/Signup";
 import Login from "../Auth/Login/Login";
 import PlantDetails from "../Pages/PlantDetails/PlantDetails";
 import Dashboardlayouts from "../Layouts/Dashboardlayouts/Dashboardlayouts";
-import AdminStatistics from "../Components/Dashboard/AdminStatistics";
+
 import AddPlantForm from "../Components/Dashboard/AddPlantForm";
 import MyInventory from "../Components/Dashboard/MyInventory";
 import ManageUsers from "../Components/Dashboard/ManageUsers";
 import Profile from "../Components/Dashboard/Profile";
 import MyOrders from "../Components/Dashboard/MyOrders";
 import ManageOrders from "../Components/Dashboard/ManageOrders";
+import PrivateRoute from "./PrivateRoute/PrivateRoute";
+import SellerRoute from "./SellerRoute/SellerRoute";
+import AdminRoute from "./AdminRoute/AdminRoute";
+import Statictics from "../Components/Dashboard/Statictics";
 
 
 const router=createBrowserRouter([
@@ -40,35 +44,55 @@ const router=createBrowserRouter([
     },
     {
      path:"/dashboard",
-     element:<Dashboardlayouts></Dashboardlayouts>,
+     element:<PrivateRoute>
+        <Dashboardlayouts></Dashboardlayouts>
+     </PrivateRoute>,
      children:[
         {
             index:true,
-            element:<AdminStatistics></AdminStatistics>
+            element:<PrivateRoute>
+                <Statictics></Statictics>
+            </PrivateRoute>
         },
         {
             path:"add-plant",
-            element:<AddPlantForm></AddPlantForm>
+            element:<PrivateRoute>
+                <SellerRoute>
+                <AddPlantForm></AddPlantForm>
+                </SellerRoute>
+            </PrivateRoute>
         },
         {
             path:'my-inventory',
-            element:<MyInventory></MyInventory>
+            element:<PrivateRoute>
+                <MyInventory></MyInventory>
+            </PrivateRoute>
         },
         {
             path:'manage-users',
-            element:<ManageUsers></ManageUsers>
+            element:<PrivateRoute>
+                <AdminRoute>
+                <ManageUsers></ManageUsers>
+                </AdminRoute>
+            </PrivateRoute>
         },
         {
             path:'profile',
-            element:<Profile></Profile>
+            element:<PrivateRoute>
+                <Profile></Profile>
+            </PrivateRoute>
         },
         {
             path:'my-orders',
-            element:<MyOrders></MyOrders>
+            element:<PrivateRoute>
+                <MyOrders></MyOrders>
+            </PrivateRoute>
         },
         {
             path:'manage-orders',
-            element:<ManageOrders></ManageOrders>
+            element:<PrivateRoute>
+                <ManageOrders></ManageOrders>
+            </PrivateRoute>
         }
      ]
     }
