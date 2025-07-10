@@ -7,9 +7,13 @@ import Button from"../../Shared/Button/Button"
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import Userole from '../../Hooks/Userole/Userole';
+import Useauth from '../../Hooks/Useauth';
 
 
 const PlantDetails = () => {
+  const [role]=Userole()
+  const {user}=Useauth()
   const {id}=useParams()
     const [isOpen,setIsOpen]=useState(false)
     const {data:plant={},isLoading,refetch}=useQuery({
@@ -96,7 +100,7 @@ const PlantDetails = () => {
           <div className='flex justify-between'>
             <p className='font-bold text-3xl text-gray-500'>Price: {price}</p>
             <div>
-              <Button label={quantity>0?'purchase':'out of stock'}  onClick={() => setIsOpen(true)}/>
+              <Button disabled={!user || user?.email===seller?.email || role!='customer'||quantity===0} label={quantity>0?'purchase':'out of stock'}  onClick={() => setIsOpen(true)}/>
             </div>
           </div>
           <hr className='my-6' />

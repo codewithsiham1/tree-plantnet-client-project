@@ -51,7 +51,9 @@ const router=createBrowserRouter([
         {
             index:true,
             element:<PrivateRoute>
+                <AdminRoute>
                 <Statictics></Statictics>
+                </AdminRoute>
             </PrivateRoute>
         },
         {
@@ -65,7 +67,9 @@ const router=createBrowserRouter([
         {
             path:'my-inventory',
             element:<PrivateRoute>
-                <MyInventory></MyInventory>
+                <SellerRoute>
+                    <MyInventory></MyInventory>
+                </SellerRoute>
             </PrivateRoute>
         },
         {
@@ -91,7 +95,9 @@ const router=createBrowserRouter([
         {
             path:'manage-orders',
             element:<PrivateRoute>
-                <ManageOrders></ManageOrders>
+               <SellerRoute>
+                 <ManageOrders></ManageOrders>
+               </SellerRoute>
             </PrivateRoute>
         }
      ]

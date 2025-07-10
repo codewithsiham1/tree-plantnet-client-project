@@ -10,7 +10,8 @@ import Authprovider from './Provider/Authprovider.jsx'
 import { ToastContainer } from 'react-toastify'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 const queryClient = new QueryClient()
-
+import 'react-date-range/dist/styles.css'; // main styles for react-date-range calendar
+import 'react-date-range/dist/theme/default.css'; // default theme styles
 createRoot(document.getElementById('root')).render(
   <StrictMode>
   <Authprovider>

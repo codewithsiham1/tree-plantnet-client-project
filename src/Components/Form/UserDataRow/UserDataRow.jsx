@@ -2,19 +2,38 @@ import { useState } from 'react'
 
 import PropTypes from 'prop-types'
 import UpdateUserModal from '../../../Modal/UpdateUserModal/UpdateUserModal'
-const UserDataRow = () => {
+import useAxiosSecure from '../../../Hooks/useAxiosSecure/useAxiosSecure'
+import { toast } from 'react-toastify'
+const UserDataRow = ({userData, refetch}) => {
+  const axiosSecure=useAxiosSecure()
+  const {email,role,status}=userData || {}
   const [isOpen, setIsOpen] = useState(false)
-
+  // handle userrole updated
+const updaterole=async(selectedRole)=>{
+if(role===selectedRole) return
+try{
+  await axiosSecure.patch(`/user/role/${email}`,{role:selectedRole})
+  toast.success('Role Updated Successfully')
+  refetch()
+}catch(err){
+  toast.err(err?.response?.data)
+  console.log(err)
+}finally{
+  setIsOpen(false)
+}
+}
   return (
     <tr>
       <td className='px-5 py-5 border-b border-gray-200 bg-white text-sm'>
-        <p className='text-gray-900 whitespace-no-wrap'>abc@gmail.com</p>
+        <p className='text-gray-900 whitespace-no-wrap'>{email}</p>
       </td>
       <td className='px-5 py-5 border-b border-gray-200 bg-white text-sm'>
-        <p className='text-gray-900 whitespace-no-wrap'>Customer</p>
+        <p className='text-gray-900 whitespace-no-wrap'>{role}</p>
       </td>
       <td className='px-5 py-5 border-b border-gray-200 bg-white text-sm'>
-        <p className='text-red-500 whitespace-no-wrap'>Unavailable</p>
+       {
+        status ? <p className={`${status==='Requested'?'text-yellow-500':'text-green-500'} whitespace-no-wrap`}>{status}</p>:<p className='text-red-500'>Unavilable</p>
+       }
       </td>
 
       <td className='px-5 py-5 border-b border-gray-200 bg-white text-sm'>
@@ -29,7 +48,7 @@ const UserDataRow = () => {
           <span className='relative'>Update Role</span>
         </span>
         {/* Modal */}
-        <UpdateUserModal isOpen={isOpen} setIsOpen={setIsOpen} />
+        <UpdateUserModal updaterole={updaterole} role={role} isOpen={isOpen} setIsOpen={setIsOpen} />
       </td>
     </tr>
   )

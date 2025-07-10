@@ -4,7 +4,7 @@ import Useauth from '../Useauth';
 import { useNavigate } from 'react-router-dom';
 
 export const axiosSecure=axios.create({
-    baseURL:import.meta.env. VITE_API_URL,
+    baseURL: import.meta.env.VITE_API_URL,
     withCredentials:true,
 })
 const useAxiosSecure = () => {
@@ -20,7 +20,7 @@ const useAxiosSecure = () => {
                     // logout
                     logout()
                     // navigate to login
-                    navigate()
+                    navigate('/login')
                 }
                 return Promise.reject(error)
             }

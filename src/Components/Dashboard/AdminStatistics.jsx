@@ -1,11 +1,12 @@
 import { Calendar } from 'react-date-range'
 import { FaUserAlt, FaDollarSign } from 'react-icons/fa'
 import { BsFillCartPlusFill, BsFillHouseDoorFill } from 'react-icons/bs'
+import { useState } from 'react';
 
 
 
 const AdminStatistics = () => {
- 
+  const [selectedDate, setSelectedDate] = useState(new Date());
   return (
    <>
   
@@ -86,7 +87,7 @@ const AdminStatistics = () => {
           </div>
           {/* Calender */}
           <div className=' relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md overflow-hidden'>
-            <Calendar color='#4cc718' />
+            <Calendar date={selectedDate} onChange={setSelectedDate} color='#4cc718' />
           </div>
         </div>
       </div>

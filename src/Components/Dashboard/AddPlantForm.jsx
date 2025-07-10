@@ -4,6 +4,7 @@ import Useauth from "../../Hooks/Useauth"
 import useAxiosSecure from "../../Hooks/useAxiosSecure/useAxiosSecure"
 import { toast } from "react-toastify"
 import { Helmet } from "react-helmet-async"
+import { shortImageName } from "../../Utilities"
 
 const AddPlantForm = () => {
   const {user}=Useauth()

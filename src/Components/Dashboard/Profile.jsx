@@ -3,10 +3,12 @@ import { Helmet } from 'react-helmet-async'
 import coverImg from '../../assets/images/cover.jpg'
 import Useauth from '../../Hooks/Useauth'
 import Userole from '../../Hooks/Userole/Userole'
+import LoadingSpinner from '../../Shared/LoadingSpinner/LoadingSpinner'
 const Profile = () => {
   const { user } = Useauth()
   console.log(user)
   const [role,isLoading]=Userole()
+  if(isLoading) return <LoadingSpinner/>
   return (
     <div className='flex justify-center items-center h-screen'>
       <Helmet>
@@ -28,7 +30,7 @@ const Profile = () => {
           </a>
 
           <p className='p-2 px-4 text-xs text-white bg-lime-500 rounded-full'>
-            {role?.role}
+            {role}
           </p>
           <p className='mt-2 text-xl font-medium text-gray-800 '>
             User Id: {user?.uid}
