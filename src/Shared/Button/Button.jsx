@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types'
-const Button = ({ label, onClick, disabled, outline, small, icon: Icon }) => {
+const Button = ({ label, onClick, disabled, outline, small, icon: Icon,type='button' }) => {
   return (
     <button
+    type={type}
       disabled={disabled}
       onClick={onClick}
       className={`
@@ -13,9 +14,9 @@ const Button = ({ label, onClick, disabled, outline, small, icon: Icon }) => {
           transition
           px-4
           w-full
-          ${outline ? 'bg-white' : 'bg-lime-500'}
-          ${outline ? 'border-black' : 'border-lime-500'}
-          ${outline ? 'text-black' : 'text-white'}
+          ${outline ? 'bg-red-400' : 'bg-lime-500'}
+          ${outline ? 'border-red-300' : 'border-lime-500'}
+          ${outline ? 'text-white' : 'text-white'}
           ${small ? 'text-sm' : 'text-md'}
           ${small ? 'py-1' : 'py-3'}
           ${small ? 'font-light' : 'font-semibold'}
