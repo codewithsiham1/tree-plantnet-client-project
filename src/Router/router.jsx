@@ -16,6 +16,10 @@ import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import SellerRoute from "./SellerRoute/SellerRoute";
 import AdminRoute from "./AdminRoute/AdminRoute";
 import Statictics from "../Components/Dashboard/Statictics";
+import ContactUs from "../Pages/ContactUs/ContactUs";
+import ContactMessage from "../Pages/ContactMessage/ContactMessage";
+import Allplants from "../Pages/Allplants/Allplants";
+import AboutUs from "../Pages/AboutUs/AboutUs";
 
 
 const router=createBrowserRouter([
@@ -38,7 +42,20 @@ const router=createBrowserRouter([
     {
         path:"/login",
         element:<Login></Login>
+    },
+    {
+        path:'/contact',
+        element:<ContactUs></ContactUs>
+    },
+    {
+        path:'all-plant',
+        element:<Allplants></Allplants>
+    },
+    {
+        path:"about",
+        element:<AboutUs></AboutUs>
     }
+  
    ]
  
     },
@@ -98,6 +115,14 @@ const router=createBrowserRouter([
                <SellerRoute>
                  <ManageOrders></ManageOrders>
                </SellerRoute>
+            </PrivateRoute>
+        },
+        {
+            path:'contact-message',
+            element:<PrivateRoute>
+                <AdminRoute>
+                    <ContactMessage></ContactMessage>
+                </AdminRoute>
             </PrivateRoute>
         }
      ]

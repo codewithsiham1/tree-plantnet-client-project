@@ -4,76 +4,146 @@ import { FaGoogle } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { Authcontext } from '../../Provider/Authprovider';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Login = () => {
-  const {signIn}=useContext(Authcontext)
-  const navigate=useNavigate()
-  const handlelogin=(event)=>{
-    event.preventDefault()
-    const form=event.target
-    const email=form.email.value;
-    const password=form.password.value;
-    signIn(email,password)
-    .then((result)=>{
-      const logeduser=result.user
-         toast.success('Login successful!');
-         navigate('/')
-    })
-  }
-    return (
-      <>
+  const { signIn, googlelogin } = useContext(Authcontext);
+  const navigate = useNavigate();
+
+  const handlelogin = async (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    try {
+      const result = await signIn(email, password);
+      const loggedUser = result.user;
+
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/jwt`,
+        { email: loggedUser.email },
+        { withCredentials: true }
+      );
+
+      toast.success('Login Successful');
+      navigate('/');
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.message);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await googlelogin();
+      const user = result.user;
+
+      await axios.post(`${import.meta.env.VITE_API_URL}/user/${user.email}`, {
+        name: user.displayName,
+        email: user.email,
+        image: user.photoURL,
+      });
+
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/jwt`,
+        { email: user.email },
+        { withCredentials: true }
+      );
+
+      toast.success('Login Successful with Google');
+      navigate('/');
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.message);
+    }
+  };
+
+  return (
+    <>
       <Helmet>
-  <title>PlanNet|| Login Page</title>
-</Helmet>
-        <div className='flex justify-center items-center min-h-screen bg-white'>
-            <div className='flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900'>
-              <div className='mb-8 text-center'>
-            <h1 className='my-3 text-4xl font-bold'>Log In</h1>
-            <p className='text-sm text-gray-400'> Sign in to access your account</p>
-              </div>
-              <form onSubmit={handlelogin} action="" noValidate='' className='space-y-6 ng-untouched ng-pristine ng-valid'>
-               <div className='space-y-4'>
-              <div>
-                <label htmlFor="email" className='block mb-2 text-sm'>
-                    Email Address
-                </label>
-                <input type="email" name='email' id='email' required placeholder='Enter Your Email Here' className='w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-lime-500 bg-gray-200 text-gray-900' data-temp-mail-org='0'/>
-              </div>
-              <div>
-                <div className='flex justify-between'>
-                   <label htmlFor="password" className='text-sm mb-2'>Password </label>
-                </div>
-                <input type="password" name='password' autoComplete='current-Password' id='password' required  placeholder='******' className='w-full px-9 py-2 border rounded-md border-gray-300 focus:outline-lime-500 bg-gray-200 text-gray-900'/>
-              </div>
-               </div>
-               <div>
-                <button type='submit' className='bg-lime-500 w-full rounded-md py-3 text-white'> Continue </button>
-               </div>
-              </form>
-              <div className='space-y-1'>
-               <button className='text-xs hover:underline hover:text-lime-500 text-gray-400'>Forgot Password ?</button>
-              </div>
-              <div className='flex items-center pt-4 space-x-1'>
-                 <div className='flex-1 h-px sm:w-16 dark:bg-gray-700'> </div>
-                 <p className='px-3 text-sm dark:text-gray-400'>
-                  Login with social accounts
-                 </p>
-                 <div className='flex-1 h-px sm:w-16 dark:bg-gray-700'> </div>
-              </div>
-              <div className='flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer'>
-              <FaGoogle size={32}></FaGoogle>
-              <p>Continue with Google</p>
-              </div>
-              <p className='px-6 text-sm text-center text-gray-400'>
-                 Don&apos;t have an account yet?{''}
-                 <Link to='/signup' className="hover:underline hover:text-lime-500 text-gray-600">
-                 Sign Up
-                 </Link>
-              </p>
+        <title>PlanNet || Login Page</title>
+      </Helmet>
+      <div className="flex justify-center items-center min-h-screen bg-white px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-md p-6 sm:p-8 md:p-10 bg-gray-100 rounded-lg shadow-md">
+          <div className="mb-8 text-center">
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">Log In</h1>
+            <p className="text-sm text-gray-500 mt-2">Sign in to access your account</p>
+          </div>
+
+          <form onSubmit={handlelogin} className="space-y-6">
+            <div>
+              <label htmlFor="email" className="block mb-1 text-sm text-gray-600">
+                Email Address
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                required
+                placeholder="Enter your email"
+                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lime-500 bg-gray-200 text-gray-900"
+              />
             </div>
+
+            <div>
+              <label htmlFor="password" className="block mb-1 text-sm text-gray-600">
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                autoComplete="current-password"
+                required
+                placeholder="******"
+                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lime-500 bg-gray-200 text-gray-900"
+              />
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                className="w-full py-2 bg-lime-500 hover:bg-lime-600 text-white rounded-md font-semibold transition duration-300"
+              >
+                Continue
+              </button>
+            </div>
+          </form>
+
+          <div className="mt-3 text-right">
+            <button className="text-xs text-gray-500 hover:text-lime-500 hover:underline">
+              Forgot Password?
+            </button>
+          </div>
+
+          <div className="flex items-center my-4">
+            <div className="flex-grow h-px bg-gray-300"></div>
+            <p className="mx-3 text-sm text-gray-500">or login with</p>
+            <div className="flex-grow h-px bg-gray-300"></div>
+          </div>
+
+          <button
+            onClick={handleGoogleSignIn}
+            className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-md py-2 hover:bg-gray-200 transition duration-200"
+          >
+            <FaGoogle size={20} />
+            <span className="text-sm font-medium text-gray-700">Continue with Google</span>
+          </button>
+
+          <p className="mt-6 text-sm text-center text-gray-500">
+            Don't have an account yet?{' '}
+            <Link
+              to="/signup"
+              className="text-gray-700 hover:text-lime-500 hover:underline font-medium"
+            >
+              Sign Up
+            </Link>
+          </p>
         </div>
-      </>
-    );
+      </div>
+    </>
+  );
 };
 
 export default Login;

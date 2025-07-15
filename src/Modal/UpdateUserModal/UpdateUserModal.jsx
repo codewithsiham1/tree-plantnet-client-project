@@ -13,70 +13,73 @@ import {
 } from '@headlessui/react'
 import { BsCheckLg } from 'react-icons/bs'
 import { AiOutlineDown } from 'react-icons/ai'
+
 const roles = ['customer', 'seller', 'admin']
 
-const UpdateUserModal = ({ setIsOpen, isOpen,role,updaterole }) => {
+const UpdateUserModal = ({ setIsOpen, isOpen, role, updaterole }) => {
   const [selected, setSelected] = useState(role)
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog
-        as='div'
-        className='relative z-10'
+        as="div"
+        className="relative z-50"
         onClose={() => setIsOpen(false)}
       >
+        {/* Background Overlay */}
         <TransitionChild
           as={Fragment}
-          enter='ease-out duration-300'
-          enterFrom='opacity-0'
-          enterTo='opacity-100'
-          leave='ease-in duration-200'
-          leaveFrom='opacity-100'
-          leaveTo='opacity-0'
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
         >
-          <div className='fixed inset-0 bg-black bg-opacity-25' />
+          <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm" />
         </TransitionChild>
 
-        <div className='fixed inset-0 overflow-y-auto'>
-          <div className='flex min-h-full items-center justify-center p-4 text-center'>
+        {/* Modal Wrapper */}
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4 sm:p-6 text-center">
             <TransitionChild
               as={Fragment}
-              enter='ease-out duration-300'
-              enterFrom='opacity-0 scale-95'
-              enterTo='opacity-100 scale-100'
-              leave='ease-in duration-200'
-              leaveFrom='opacity-100 scale-100'
-              leaveTo='opacity-0 scale-95'
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
             >
-              <DialogPanel className='w-full h-56 max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
+              <DialogPanel className="w-full max-w-sm sm:max-w-md md:max-w-lg transform overflow-hidden rounded-2xl bg-white px-6 py-8 text-left align-middle shadow-xl transition-all">
                 <DialogTitle
-                  as='h3'
-                  className='text-lg font-medium text-center leading-6 text-gray-900'
+                  as="h3"
+                  className="text-lg sm:text-xl font-semibold text-center text-gray-900"
                 >
                   Update User Role
                 </DialogTitle>
-                <div className='mt-4 w-full'>
+
+                {/* Dropdown */}
+                <div className="mt-6 w-full">
                   <Listbox value={selected} onChange={setSelected}>
-                    <div className='relative mt-1'>
-                      <ListboxButton className='relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm'>
-                        <span className='block truncate'>{selected}</span>
-                        <span className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2'>
-                          <AiOutlineDown
-                            className='h-5 w-5 text-gray-400'
-                            aria-hidden='true'
-                          />
+                    <div className="relative mt-1">
+                      <ListboxButton className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm">
+                        <span className="block truncate">{selected}</span>
+                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                          <AiOutlineDown className="h-4 w-4 text-gray-400" />
                         </span>
                       </ListboxButton>
                       <Transition
                         as={Fragment}
-                        leave='transition ease-in duration-100'
-                        leaveFrom='opacity-100'
-                        leaveTo='opacity-0'
+                        leave="transition ease-in duration-100"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
                       >
-                        <ListboxOptions className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm'>
-                          {roles.map((role, roleIdx) => (
+                        <ListboxOptions className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-md ring-1 ring-black/5 focus:outline-none sm:text-sm z-50">
+                          {roles.map((role, idx) => (
                             <ListboxOption
-                              key={roleIdx}
-                              className='relative cursor-default select-none py-2 pl-10 pr-4 text-gray-900 data-[focus]:bg-amber-100  data-[focus]:text-amber-900'
+                              key={idx}
+                              className="relative cursor-pointer select-none py-2 pl-10 pr-4 text-gray-900 hover:bg-green-100 hover:text-green-900"
                               value={role}
                             >
                               {({ selected }) => (
@@ -88,14 +91,11 @@ const UpdateUserModal = ({ setIsOpen, isOpen,role,updaterole }) => {
                                   >
                                     {role}
                                   </span>
-                                  {selected ? (
-                                    <span className='absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600'>
-                                      <BsCheckLg
-                                        className='h-5 w-5'
-                                        aria-hidden='true'
-                                      />
+                                  {selected && (
+                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-green-600">
+                                      <BsCheckLg className="h-4 w-4" />
                                     </span>
-                                  ) : null}
+                                  )}
                                 </>
                               )}
                             </ListboxOption>
@@ -105,20 +105,23 @@ const UpdateUserModal = ({ setIsOpen, isOpen,role,updaterole }) => {
                     </div>
                   </Listbox>
                 </div>
-                <hr className='mt-16 ' />
 
-                <div className='flex mt-2 justify-center gap-5'>
+                {/* Divider */}
+                <hr className="my-8" />
+
+                {/* Buttons */}
+                <div className="flex flex-col sm:flex-row justify-center gap-4">
                   <button
-                  onClick={()=>updaterole(selected)}
-                    type='button'
-                    className='inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2'
+                    onClick={() => updaterole(selected)}
+                    type="button"
+                    className="w-full sm:w-auto inline-flex justify-center rounded-md bg-green-100 px-5 py-2 text-sm font-medium text-green-800 hover:bg-green-200 transition"
                   >
                     Update
                   </button>
                   <button
-                    type='button'
-                    className='inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2'
                     onClick={() => setIsOpen(false)}
+                    type="button"
+                    className="w-full sm:w-auto inline-flex justify-center rounded-md bg-red-100 px-5 py-2 text-sm font-medium text-red-800 hover:bg-red-200 transition"
                   >
                     Cancel
                   </button>
@@ -133,10 +136,10 @@ const UpdateUserModal = ({ setIsOpen, isOpen,role,updaterole }) => {
 }
 
 UpdateUserModal.propTypes = {
-  user: PropTypes.object,
-  modalHandler: PropTypes.func,
-  setIsOpen: PropTypes.func,
-  isOpen: PropTypes.bool,
+  setIsOpen: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  role: PropTypes.string.isRequired,
+  updaterole: PropTypes.func.isRequired,
 }
 
 export default UpdateUserModal

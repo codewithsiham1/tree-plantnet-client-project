@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { GrLogout } from 'react-icons/gr'
 import { FcSettings } from 'react-icons/fc'
 import { AiOutlineBars } from 'react-icons/ai'
@@ -7,7 +7,7 @@ import { AiOutlineBars } from 'react-icons/ai'
 
 
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 
 import logo from '../../assets/images/logo-flat.png'
@@ -18,16 +18,26 @@ import SellerMenu from '../SellerMenu/SellerMenu'
 import CustomerMenu from '../CustomerMenu/CustomerMenu'
 import MenuItem from '../MenuItem/MenuItem'
 import Userole from '../../Hooks/Userole/Userole'
+import LoadingSpinner from '../../Shared/LoadingSpinner/LoadingSpinner'
+import { Authcontext } from '../../Provider/Authprovider'
 const Sidebar = () => {
-  const { logOut } = Useauth()
+  const {handlelogOut}=useContext(Authcontext)
+  const navigate=useNavigate()
   const [isActive, setActive] = useState(false)
 const [role,isLoading]=Userole()
+// handlelogout
+const handleLogoutClick=async()=>{
+  const success=await handlelogOut()
+  if(success){
+    navigate('/login')
+  }
+}
   // Sidebar Responsive Handler
   const handleToggle = () => {
     setActive(!isActive)
   }
   if (isLoading) {
-  return <div className='p-5'>Loading Sidebar...</div>
+  return <div className='p-5'><LoadingSpinner/></div>
 }
   return (
     <>
@@ -38,7 +48,7 @@ const [role,isLoading]=Userole()
             <Link to='/'>
               <img
                 // className='hidden md:block'
-                src='https://i.ibb.co/4ZXzmq5/logo.png'
+                src={logo}
                 alt='logo'
                 width='100'
                 height='100'
@@ -96,7 +106,7 @@ const [role,isLoading]=Userole()
             address='/dashboard/profile'
           />
           <button
-            onClick={logOut}
+            onClick={handleLogoutClick}
             className='flex w-full items-center px-4 py-2 mt-5 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform'
           >
             <GrLogout className='w-5 h-5' />

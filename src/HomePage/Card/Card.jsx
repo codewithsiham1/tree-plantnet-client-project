@@ -1,27 +1,56 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { FcRating } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
 
-const Card = ({plant}) => {
-   const {name,category,quantity,price,image,_id}=plant ||{}
-    return (
-     <Link to={`/plant/${_id}`}  className='col-span-1 cursor-pointer group shadow-xl p-3 rounded-xl'>
-        <div className='flex flex-col gap-2 w-full py-6'>
-           <div className='aspect-square w-full relative overflow-hidden rounded-xl'>
-            <img className='object-cover h-full w-full group-hover:scale-110 transition' src={image} alt="Plant Image" />
-            <div className='absolute top-3 right-3'>
+const Card = ({ plant, showRating = false }) => {
+  const { name, category, quantity, price, image, _id } = plant || {};
+  const [averageRating, setAverageRating] = useState(0);
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/review/stat/${_id}`)
+      .then(res => res.json())
+      .then(data => {
+        setAverageRating(data?.averageRating?.toFixed(1) || 0);
+      })
+      .catch(err => console.log(err));
+  }, [_id]);
+
+  return (
+    <Link
+      to={`/plant/${_id}`}
+      className="w-full sm:w-[90%] md:w-[95%] lg:w-full mx-auto
+                 bg-white shadow-md hover:shadow-xl transition rounded-xl p-4
+                 flex flex-col gap-4"
+    >
+      {/* Image */}
+      <div className="h-[220px] sm:h-[250px] md:h-[280px] w-full overflow-hidden rounded-lg">
+        <img
+          src={image}
+          alt={name}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+      </div>
+
+      {/* Text Content */}
+      <div className="space-y-1">
+        <h3 className="text-base sm:text-lg font-semibold text-gray-800">{name}</h3>
+        <p className="text-sm text-gray-600">Category: {category}</p>
+        <p className="text-sm text-gray-600">Quantity: {quantity}</p>
+        <p className="text-sm font-medium text-gray-700">Price: ${price}</p>
+
+        {showRating && averageRating > 0 && (
+          <div className="flex items-center gap-2 mt-2 text-sm">
+            <div className="flex">
+              {Array.from({ length: Math.floor(averageRating) }).map((_, i) => (
+                <FcRating key={i} />
+              ))}
             </div>
-           </div>
-           <div className='font-semibold text-lg'>{name}</div>
-           <div className='font-semibold text-lg'>Category:{category}</div>
-           <div className='font-semibold text-lg'>Quantity:{quantity}</div>
-           <div className='flex flex-row items-center gap-1'>
-              <div className='font-semibold'>
-               price: ${price}
-              </div>
-           </div>
-        </div>
-     </Link>
-    );
+            <span className="text-gray-600">{averageRating}/5</span>
+          </div>
+        )}
+      </div>
+    </Link>
+  );
 };
 
 export default Card;

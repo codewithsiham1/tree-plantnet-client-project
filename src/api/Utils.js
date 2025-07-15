@@ -1,12 +1,17 @@
-import axios from 'axios'
-// Upload image and return image url
+import axios from 'axios';
 
-export const imageUpload = async imageData => {
-  const formData = new FormData()
-  formData.append('image', imageData)
-  const { data } = await axios.post(
+export const imageUpload = async (imageFile) => {
+  const formData = new FormData();
+  formData.append('image', imageFile);
+
+  const res = await axios.post(
     `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMG_KEY}`,
     formData
-  )
-  return data.data.display_url
-}
+  );
+
+  if (res.data && res.data.data && res.data.data.display_url) {
+    return res.data.data.display_url;
+  } else {
+    throw new Error('Image upload failed');
+  }
+};

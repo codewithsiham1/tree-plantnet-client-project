@@ -5,87 +5,56 @@ import useAxiosSecure from '../../Hooks/useAxiosSecure/useAxiosSecure'
 import { useQuery } from '@tanstack/react-query'
 import LoadingSpinner from '../../Shared/LoadingSpinner/LoadingSpinner'
 
-
-
-
 const ManageOrders = () => {
-  const {user}=Useauth()
-  const axiosSecure=useAxiosSecure()
-   const {data:orders=[],isLoading,refetch}=useQuery({
-    queryKey:['orders',user?.email],
+  const { user } = Useauth()
+  const axiosSecure = useAxiosSecure()
+
+  const { data: orders = [], isLoading, refetch } = useQuery({
+    queryKey: ['orders', user?.email],
     enabled: !!user?.email,
-    queryFn:async()=>{
-   const {data}=await axiosSecure(`/seller-orders`)
-   return data
+    queryFn: async () => {
+      const { data } = await axiosSecure('/seller-orders')
+      return data
     }
-    })
-    console.log("Orders data manageorder:", orders)
-    if(isLoading) return <LoadingSpinner></LoadingSpinner>
+  })
+
+  if (isLoading) return <LoadingSpinner />
+
   return (
     <>
       <Helmet>
         <title>Manage Orders</title>
       </Helmet>
-      <div className='container mx-auto px-4 sm:px-8'>
-        <div className='py-8'>
-          <div className='-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto'>
-            <div className='inline-block min-w-full shadow rounded-lg overflow-hidden'>
-              <table className='min-w-full leading-normal'>
-                <thead>
-                  <tr>
-                    <th
-                      scope='col'
-                      className='px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal'
-                    >
-                      Name
-                    </th>
-                    <th
-                      scope='col'
-                      className='px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal'
-                    >
-                      Customer
-                    </th>
-                    <th
-                      scope='col'
-                      className='px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal'
-                    >
-                      Price
-                    </th>
-                    <th
-                      scope='col'
-                      className='px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal'
-                    >
-                      Quantity
-                    </th>
-                    <th
-                      scope='col'
-                      className='px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal'
-                    >
-                      Address
-                    </th>
-                    <th
-                      scope='col'
-                      className='px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal'
-                    >
-                      Status
-                    </th>
 
-                    <th
-                      scope='col'
-                      className='px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal'
-                    >
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    orders.map(orderData=><SellerOrderDataRow key={orderData?._id} orderData={orderData} refetch={refetch} />)
-                  }
-                </tbody>
-              </table>
-            </div>
-          </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h2 className="text-2xl font-semibold mb-6">Manage Orders</h2>
+
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden text-sm">
+            <thead>
+              <tr className="bg-gray-100 text-gray-800">
+                <th className="px-4 py-3 text-left font-medium">Name</th>
+                <th className="px-4 py-3 text-left font-medium">Customer</th>
+                <th className="px-4 py-3 text-left font-medium">Price</th>
+                <th className="px-4 py-3 text-left font-medium">Quantity</th>
+                <th className="px-4 py-3 text-left font-medium">Address</th>
+                <th className="px-4 py-3 text-left font-medium">Status</th>
+                <th className="px-4 py-3 text-left font-medium">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {
+                orders.map(orderData => (
+                  <SellerOrderDataRow
+                    key={orderData?._id}
+                    orderData={orderData}
+                    refetch={refetch}
+                  />
+                ))
+              }
+            </tbody>
+          </table>
         </div>
       </div>
     </>

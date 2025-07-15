@@ -7,14 +7,14 @@ import { Helmet } from "react-helmet-async"
 import { shortImageName } from "../../Utilities"
 
 const AddPlantForm = () => {
-  const {user}=Useauth()
-  const [uploadButton,setUploadButton]=useState({name:"Upload-Image"})
-  const [loading,setloading]=useState(false)
-  const axiossecure=useAxiosSecure()
-  // form submit
-  const handlesubmit=async(e)=>{
-e.preventDefault()
-setloading(true)
+  const { user } = Useauth()
+  const [uploadButton, setUploadButton] = useState({ name: "Upload Image" })
+  const [loading, setLoading] = useState(false)
+  const axiosSecure = useAxiosSecure()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
     const form = e.target
     const name = form.name.value
     const description = form.description.value
@@ -23,150 +23,147 @@ setloading(true)
     const quantity = parseInt(form.quantity.value)
     const image = form.image.files[0]
     const imageUrl = await imageUpload(image)
-    // seller info
-    const seller={
-    name:user?.displayName,
-    image:user?.photoURL,
-    email:user?.email,
+
+    const seller = {
+      name: user?.displayName,
+      image: user?.photoURL,
+      email: user?.email,
     }
-    // create plant data object
-    const plantData={
-  name,description,category,price,quantity,image:imageUrl,seller
+
+    const plantData = {
+      name,
+      description,
+      category,
+      price,
+      quantity,
+      image: imageUrl,
+      seller,
     }
-    console.table(plantData)
-    // save plant in db
-    try{
-// post request
-const {data}=await axiossecure.post('/plants',plantData,{withCredentials:true,})
-toast.success('Data Added Succesfully')
-    }catch(err){
+
+    try {
+      const { data } = await axiosSecure.post("/plants", plantData, {
+        withCredentials: true,
+      })
+      toast.success("Plant added successfully!")
+    } catch (err) {
       console.log(err)
+    } finally {
+      setLoading(false)
     }
- finally{
-  setloading(false)
- }
   }
+
   return (
-   <>
-     <Helmet>
-           <title>AddplantForm</title>
-         </Helmet>
-    <div className='w-full min-h-[calc(100vh-40px)] flex flex-col justify-center items-center text-gray-800 rounded-xl bg-gray-50'>
-      <form onSubmit={handlesubmit}>
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-10'>
-          <div className='space-y-6'>
-            {/* Name */}
-            <div className='space-y-1 text-sm'>
-              <label htmlFor='name' className='block text-gray-600'>
-                Name
-              </label>
-              <input
-                className='w-full px-4 py-3 text-gray-800 border border-lime-300 focus:outline-lime-500 rounded-md bg-white'
-                name='name'
-                id='name'
-                type='text'
-                placeholder='Plant Name'
-                required
-              />
-            </div>
-            {/* Category */}
-            <div className='space-y-1 text-sm'>
-              <label htmlFor='category' className='block text-gray-600 '>
-                Category
-              </label>
-              <select
-                required
-                className='w-full px-4 py-3 border-lime-300 focus:outline-lime-500 rounded-md bg-white'
-                name='category'
-              >
-                <option value='Indoor'>Indoor</option>
-                <option value='Outdoor'>Outdoor</option>
-                <option value='Succulent'>Succulent</option>
-                <option value='Flowering'>Flowering</option>
-              </select>
-            </div>
-            {/* Description */}
-            <div className='space-y-1 text-sm'>
-              <label htmlFor='description' className='block text-gray-600'>
-                Description
-              </label>
-
-              <textarea
-                id='description'
-                placeholder='Write plant description here...'
-                className='block rounded-md focus:lime-300 w-full h-32 px-4 py-3 text-gray-800  border border-lime-300 bg-white focus:outline-lime-500 '
-                name='description'
-              ></textarea>
-            </div>
-          </div>
-          <div className='space-y-6 flex flex-col'>
-            {/* Price & Quantity */}
-            <div className='flex justify-between gap-2'>
-              {/* Price */}
-              <div className='space-y-1 text-sm'>
-                <label htmlFor='price' className='block text-gray-600 '>
-                  Price
-                </label>
+    <>
+      <Helmet>
+        <title>Add Plant</title>
+      </Helmet>
+      <div className="w-full min-h-[calc(100vh-80px)] flex flex-col justify-center items-center px-4 py-10 bg-gray-50 text-gray-800">
+        <form onSubmit={handleSubmit} className="w-full max-w-6xl bg-white p-6 md:p-10 rounded-lg shadow-lg">
+          <h2 className="text-2xl font-semibold mb-8 text-center text-green-700">Add a New Plant</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Left Side */}
+            <div className="space-y-6">
+              {/* Name */}
+              <div className="space-y-1 text-sm">
+                <label htmlFor="name" className="block text-gray-600 font-medium">Name</label>
                 <input
-                  className='w-full px-4 py-3 text-gray-800 border border-lime-300 focus:outline-lime-500 rounded-md bg-white'
-                  name='price'
-                  id='price'
-                  type='number'
-                  placeholder='Price per unit'
+                  name="name"
+                  id="name"
+                  type="text"
+                  placeholder="Plant Name"
                   required
+                  className="w-full px-4 py-3 border border-lime-300 rounded-md focus:outline-lime-500"
                 />
               </div>
 
-              {/* Quantity */}
-              <div className='space-y-1 text-sm'>
-                <label htmlFor='quantity' className='block text-gray-600'>
-                  Quantity
-                </label>
-                <input
-                  className='w-full px-4 py-3 text-gray-800 border border-lime-300 focus:outline-lime-500 rounded-md bg-white'
-                  name='quantity'
-                  id='quantity'
-                  type='number'
-                  placeholder='Available quantity'
+              {/* Category */}
+              <div className="space-y-1 text-sm">
+                <label htmlFor="category" className="block text-gray-600 font-medium">Category</label>
+                <select
+                  name="category"
                   required
-                />
+                  className="w-full px-4 py-3 border border-lime-300 rounded-md focus:outline-lime-500"
+                >
+                  <option value="Indoor">Indoor</option>
+                  <option value="Outdoor">Outdoor</option>
+                  <option value="Succulent">Succulent</option>
+                  <option value="Flowering">Flowering</option>
+                </select>
+              </div>
+
+              {/* Description */}
+              <div className="space-y-1 text-sm">
+                <label htmlFor="description" className="block text-gray-600 font-medium">Description</label>
+                <textarea
+                  name="description"
+                  id="description"
+                  placeholder="Write plant description here..."
+                  required
+                  className="w-full h-32 px-4 py-3 border border-lime-300 rounded-md focus:outline-lime-500"
+                ></textarea>
               </div>
             </div>
-            {/* Image */}
-            <div className=' p-4  w-full  m-auto rounded-lg flex-grow'>
-              <div className='file_upload px-5 py-3 relative border-4 border-dotted border-gray-300 rounded-lg'>
-                <div className='flex flex-col w-max mx-auto text-center'>
-                  <label>
+
+            {/* Right Side */}
+            <div className="space-y-6">
+              {/* Price & Quantity */}
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="w-full space-y-1 text-sm">
+                  <label htmlFor="price" className="block text-gray-600 font-medium">Price</label>
+                  <input
+                    name="price"
+                    id="price"
+                    type="number"
+                    placeholder="Price per unit"
+                    required
+                    className="w-full px-4 py-3 border border-lime-300 rounded-md focus:outline-lime-500"
+                  />
+                </div>
+                <div className="w-full space-y-1 text-sm">
+                  <label htmlFor="quantity" className="block text-gray-600 font-medium">Quantity</label>
+                  <input
+                    name="quantity"
+                    id="quantity"
+                    type="number"
+                    placeholder="Available quantity"
+                    required
+                    className="w-full px-4 py-3 border border-lime-300 rounded-md focus:outline-lime-500"
+                  />
+                </div>
+              </div>
+
+              {/* Image Upload */}
+              <div className="space-y-2">
+                <label className="block text-gray-600 font-medium">Upload Image</label>
+                <div className="file_upload px-4 py-3 border-2 border-dashed border-gray-300 rounded-md text-center">
+                  <label className="cursor-pointer inline-block bg-lime-500 text-white px-4 py-2 rounded hover:bg-lime-600">
+                    {uploadButton.name}
                     <input
-                    onChange={(e)=>setUploadButton(e.target.files[0])}
-                      className='text-sm cursor-pointer w-36 hidden'
-                      type='file'
-                      name='image'
-                      id='image'
-                      accept='image/*'
+                      type="file"
+                      name="image"
+                      id="image"
+                      accept="image/*"
                       hidden
+                      onChange={(e) => setUploadButton(e.target.files[0])}
                     />
-                    <div className='bg-lime-500 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-lime-500'>
-                      {uploadButton.name}
-                    </div>
                   </label>
                 </div>
               </div>
-            </div>
 
-            {/* Submit Button */}
-            <button
-              type='submit'
-              className='w-full p-3 mt-5 text-center font-medium text-white transition duration-200 rounded shadow-md bg-lime-500 '
-            >
-              Save & Continue
-            </button>
+              {/* Submit */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full mt-4 bg-lime-500 hover:bg-lime-600 text-white font-semibold py-3 rounded-md transition duration-200"
+              >
+                {loading ? "Submitting..." : "Save & Continue"}
+              </button>
+            </div>
           </div>
-        </div>
-      </form>
-    </div>
-   </>
+        </form>
+      </div>
+    </>
   )
 }
 
-export default AddPlantForm
+export default AddPlantForm;

@@ -1,6 +1,8 @@
 import React, { createContext, useEffect, useState } from 'react';
 import auth from '../Firebase/Firebase';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
+import axios from 'axios';
+
 
 export const Authcontext=createContext(null)
 const googleProvider = new GoogleAuthProvider();
@@ -25,6 +27,18 @@ const Authprovider = ({children}) => {
 const updateprofile = (name, photo) => {
   return updateProfile(auth.currentUser, { displayName: name, photoURL: photo });
 };
+// logout function
+const handlelogOut=async()=>{
+  try{
+    await axios.get('http://localhost:5000/logout',{
+      withCredentials:true
+    });
+    setuser(null)
+   return
+  }catch (error) {
+      console.error('Logout failed:', error);
+    }
+}
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setuser(currentUser);
@@ -34,7 +48,7 @@ const updateprofile = (name, photo) => {
     return unsubscribe;
   }, []);
     const authInfo={
- user,loading,setuser,setloading,createuser,signIn,logout,googlelogin,updateprofile
+ user,loading,setuser,setloading,createuser,signIn,logout,googlelogin,updateprofile,handlelogOut
     }
     return (
        <Authcontext.Provider value={authInfo}>

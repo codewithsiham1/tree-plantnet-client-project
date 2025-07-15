@@ -88,6 +88,8 @@ refetch();
         <UpdatePlantModal
           isOpen={isEditModalOpen}
           setIsEditModalOpen={setIsEditModalOpen}
+          plant={plant}
+          refetch={refetch}
         />
       </td>
     </tr>

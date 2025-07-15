@@ -1,7 +1,58 @@
-const UpdatePlantForm = () => {
+import { toast } from "react-toastify"
+import useAxiosSecure from "../../../Hooks/useAxiosSecure/useAxiosSecure"
+
+const UpdatePlantForm = ({plant, setIsEditModalOpen, refetch }) => {
+  const axiosSecure=useAxiosSecure()
+  const handleSubmit=async(e)=>{
+    e.preventDefault()
+  const form=e.target
+  const name=form.name.value
+  const category=form.category.value
+  const description=form.description.value
+  const price=form.price.value
+  const quantity=form.quantity.value
+  const imageFile=form.image.files[0]
+  let imageURL=plant.image
+  if(imageFile){
+    const formData=new FormData()
+    formData.append('image',imageFile)
+    try{
+      const res=await fetch(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMG_KEY}`,{
+        method:'POST',
+        body:formData,
+       })
+       const imgData=await res.json()
+       imageURL=imgData.data.url
+
+    }catch(error){
+      console.log(error)
+      toast.error('Image upload failed')
+      return
+    }
+  }
+// updateplant
+const updatedPlant={
+  name,category,description,price,quantity,image:imageURL,
+}
+console.log(updatedPlant)
+// fetchdata
+try{
+const res=await axiosSecure.patch(`/plants/${plant._id}`,updatedPlant)
+if(res.data.modifiedCount>0){
+  toast.success('Plant updated successfully!')
+  refetch()
+  setIsEditModalOpen(false)
+}else {
+  toast.info('No changes made.')
+}
+}catch(error){
+  toast.error('Failed to update plant')
+  console.log(error)
+}
+  }
   return (
     <div className='w-full flex flex-col justify-center items-center text-gray-800 rounded-xl bg-gray-50'>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className='grid grid-cols-1 gap-10'>
           <div className='space-y-6'>
             {/* Name */}

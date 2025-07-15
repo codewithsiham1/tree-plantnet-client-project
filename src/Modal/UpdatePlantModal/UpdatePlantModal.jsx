@@ -11,7 +11,7 @@ import UpdatePlantForm from '../../Components/Form/UpdatePlantForm/UpdatePlantFo
 
 
 
-const UpdatePlantModal = ({ setIsEditModalOpen, isOpen }) => {
+const UpdatePlantModal = ({ setIsEditModalOpen, isOpen,plant, refetch  }) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog
@@ -50,7 +50,9 @@ const UpdatePlantModal = ({ setIsEditModalOpen, isOpen }) => {
                   Update Plant Info
                 </DialogTitle>
                 <div className='mt-2 w-full'> 
-                  <UpdatePlantForm />
+                  <UpdatePlantForm    plant={plant} 
+            setIsEditModalOpen={setIsEditModalOpen} 
+            refetch={refetch}/>
                 </div>
                 <hr className='mt-8 ' />
                 <div className='mt-2 '>
