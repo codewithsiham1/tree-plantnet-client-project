@@ -19,12 +19,12 @@ const PopularProduct = () => {
   useEffect(() => {
     const fetchPopularPlants = async () => {
       try {
-        const res = await fetch('http://localhost:5000/plants');
+        const res = await fetch('https://y-pied-phi.vercel.app/plants');
         const plants = await res.json();
 
         const ratedPlants = await Promise.all(
           plants.map(async (plant) => {
-            const res = await fetch(`http://localhost:5000/review/stat/${plant._id}`);
+            const res = await fetch(`https://y-pied-phi.vercel.app/review/stat/${plant._id}`);
             const data = await res.json();
             return {
               ...plant,
