@@ -8,15 +8,25 @@ import LoadingSpinner from '../../Shared/LoadingSpinner/LoadingSpinner';
 import { Helmet } from 'react-helmet-async';
 
 const Allplants = () => {
-  const { data: plants = [], isLoading } = useQuery({
-    queryKey: ['allPlants'],
-    queryFn: async () => {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/plants`);
+const { data: plants = [], isLoading, error } = useQuery({
+  queryKey: ['allPlants'],
+  queryFn: async () => {
+    try {
+      // const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/plants`);
+      const { data } = await axios.get('https://y-pied-phi.vercel.app/plants');
+      console.log('Plants data:', data);
       return data;
-    },
-  });
+    } catch (err) {
+      console.error('Failed to fetch plants:', err);
+      throw err;
+    }
+  },
+});
 
-  if (isLoading) return <LoadingSpinner />;
+if (isLoading) return <LoadingSpinner />;
+
+if (error) return <div>Error loading plants</div>;
+
 
   return (
     <>
