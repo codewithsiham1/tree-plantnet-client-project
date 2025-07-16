@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import useAxiosSecure from '../../Hooks/useAxiosSecure/useAxiosSecure';
 
 import Card from '../../HomePage/Card/Card';
 import Container from '../../Shared/Container/Container';
@@ -8,25 +8,19 @@ import LoadingSpinner from '../../Shared/LoadingSpinner/LoadingSpinner';
 import { Helmet } from 'react-helmet-async';
 
 const Allplants = () => {
-const { data: plants = [], isLoading, error } = useQuery({
-  queryKey: ['allPlants'],
-  queryFn: async () => {
-    try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/plants`);
-     
-      console.log('Plants data:', data);
+  const axiosSecure = useAxiosSecure();
+
+  const { data: plants = [], isLoading, error } = useQuery({
+    queryKey: ['allPlants'],
+    queryFn: async () => {
+      const { data } = await axiosSecure.get('/plants');
       return data;
-    } catch (err) {
-      console.error('Failed to fetch plants:', err);
-      throw err;
-    }
-  },
-});
+    },
+  });
 
-if (isLoading) return <LoadingSpinner />;
+  if (isLoading) return <LoadingSpinner />;
 
-if (error) return <div>Error loading plants</div>;
-
+  if (error) return <div>Error loading plants</div>;
 
   return (
     <>
