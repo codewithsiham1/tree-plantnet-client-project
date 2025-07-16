@@ -63,7 +63,7 @@ const ServicesCard = () => {
             key={index}
             className="flex flex-col items-center text-center space-y-4 hover:shadow-xl p-4 rounded-xl transition-all duration-300"
           >
-            <div className="w-20 h-20 flex items-center justify-center rounded-full shadow-md transition-all duration-300 hover:bg-lime-500">
+            <div className="w-20 h-20 flex items-center justify-center rounded-full shadow-md transition-all duration-300 hover:bg-[#1d4d2b]">
               {service.icon}
             </div>
             <h4 className="text-base md:text-lg font-semibold">{service.title}</h4>

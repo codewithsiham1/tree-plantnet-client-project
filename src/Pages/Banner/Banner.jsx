@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import { motion } from 'framer-motion';
@@ -9,10 +9,17 @@ import Banner2 from "../../assets/images/sample-2.jpg";
 import 'swiper/css';
 import 'swiper/css/pagination';
 import '../Bannercss/Banner.css';
+import { useNavigate } from 'react-router-dom';
+import Useauth from '../../Hooks/Useauth';
+import axios from 'axios';
 
 const Banner = () => {
   const [slideKey, setSlideKey] = useState(0);
-
+  const navigate=useNavigate()
+  
+const handleshopnow=(id)=>{
+    navigate('all-plant')
+}
   return (
     <div className="relative z-0">
       <Swiper
@@ -67,7 +74,7 @@ const Banner = () => {
     : "Buying and selling plants has never been this easy! Whether you’re selling your nurtured plants or looking for the perfect one to brighten up your space – PlantNet has you covered."}
 </p>
 
-<button className="bg-[#1d4d2b] hover:bg-yellow-600 text-white py-1 px-3 sm:px-4 md:px-6 rounded-md max-w-max text-[8px] sm:text-sm md:text-base">
+<button onClick={handleshopnow} className="bg-[#1d4d2b] hover:bg-yellow-600 text-white py-1 px-3 sm:px-4 md:px-6 rounded-md max-w-max text-[8px] sm:text-sm md:text-base">
   Shop Now
 </button>
                 </div>

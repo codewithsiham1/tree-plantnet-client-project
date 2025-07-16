@@ -1,8 +1,13 @@
 import React from 'react';
 import image1 from "../../assets/images/sub-banner-1.jpg";
 import image2 from "../../assets/images/sub-banner-2.jpg";
+import { useNavigate } from 'react-router-dom';
 
 const SupperBanner = () => {
+  const navigate=useNavigate()
+  const handleshopnow=()=>{
+    navigate('/all-plant')
+  }
   const banners = [
     {
       image: image1,
@@ -38,7 +43,7 @@ const SupperBanner = () => {
             <p className="text-[8px]sm:text-[8px] md:text-2xl font-bold text-black whitespace-pre-line">
               {banner.subtitle}
             </p>
-            <button className="bg-[#2b6e42] text-white px-5 py-2 rounded hover:bg-lime-700 transition text-sm sm:text-base">
+            <button onClick={handleshopnow} className="bg-[#2b6e42] text-white px-5 py-2 rounded hover:bg-lime-700 transition text-sm sm:text-base">
               Shop Now
             </button>
           </div>
