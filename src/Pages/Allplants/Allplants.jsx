@@ -12,8 +12,8 @@ const { data: plants = [], isLoading, error } = useQuery({
   queryKey: ['allPlants'],
   queryFn: async () => {
     try {
-      // const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/plants`);
-      const { data } = await axios.get('https://y-pied-phi.vercel.app/plants');
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/plants`);
+     
       console.log('Plants data:', data);
       return data;
     } catch (err) {
