@@ -19,12 +19,12 @@ const PopularProduct = () => {
   useEffect(() => {
     const fetchPopularPlants = async () => {
       try {
-        const res = await fetch('https://y-pied-phi.vercel.app/plants');
+        const res = await fetch('https://y-hbahojeoy-sihams-projects-6b0cef74.vercel.app/plants');
         const plants = await res.json();
-
+    
         const ratedPlants = await Promise.all(
           plants.map(async (plant) => {
-            const res = await fetch(`https://y-pied-phi.vercel.app/review/stat/${plant._id}`);
+            const res = await fetch(`https://tree-plantnet-server-side-project-fuvb.onrender.com/${plant._id}`);
             const data = await res.json();
             return {
               ...plant,
@@ -32,13 +32,14 @@ const PopularProduct = () => {
             };
           })
         );
-
+    
         const filtered = ratedPlants.filter(p => p.averageRating >= 1);
         setPopularPlants(filtered);
       } catch (error) {
         console.error('Failed to fetch popular plants:', error);
       }
     };
+    
 
     fetchPopularPlants();
   }, []);
