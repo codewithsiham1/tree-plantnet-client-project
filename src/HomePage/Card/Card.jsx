@@ -7,7 +7,7 @@ const Card = ({ plant, showRating = false }) => {
   const [averageRating, setAverageRating] = useState(0);
 
   useEffect(() => {
-    fetch(`https://tree-plantnet-server-side-project-fuvb.onrender.com/${_id}`)
+    fetch(`${import.meta.env.VITE_API_URL}/plants/${_id}`)
       .then(res => res.json())
       .then(data => {
         setAverageRating(data?.averageRating?.toFixed(1) || 0);

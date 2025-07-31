@@ -16,7 +16,7 @@ const AdminStatistics = () => {
   const {data:statData,isLoading}=useQuery({
     queryKey:['admin-stat'],
     queryFn:async()=>{
-      const {data}=await axiosSecure.get('/admit-stat')
+      const {data}=await axiosSecure.get('/admin-stat')
       return data
     }
   })

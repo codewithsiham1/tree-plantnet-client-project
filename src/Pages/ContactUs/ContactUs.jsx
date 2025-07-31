@@ -31,7 +31,7 @@ const ContactUs = () => {
     };
 
     try {
-      const res = await fetch("https://y-hbahojeoy-sihams-projects-6b0cef74.vercel.app/contact", {
+      const res = await fetch("http://localhost:5000/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

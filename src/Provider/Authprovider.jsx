@@ -30,7 +30,7 @@ const updateprofile = (name, photo) => {
 // logout function
 const handlelogOut=async()=>{
   try{
-    await axios.get('https://y-hbahojeoy-sihams-projects-6b0cef74.vercel.app/logout',{
+    await axios.get('http://localhost:5000/logout',{
       withCredentials:true
     });
     setuser(null)

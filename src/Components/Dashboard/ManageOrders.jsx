@@ -7,17 +7,19 @@ import LoadingSpinner from '../../Shared/LoadingSpinner/LoadingSpinner'
 
 const ManageOrders = () => {
   const { user } = Useauth()
+  console.log("Logged in user:", user);
   const axiosSecure = useAxiosSecure()
 
   const { data: orders = [], isLoading, refetch } = useQuery({
     queryKey: ['orders', user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
-      const { data } = await axiosSecure('/seller-orders')
+      const { data } = await axiosSecure(`/seller-orders/${user?.email}`)
       return data
     }
   })
-
+  console.log("Orders fetched:", orders);
+ 
   if (isLoading) return <LoadingSpinner />
 
   return (

@@ -16,7 +16,7 @@ const handleDelete=async()=>{
 // fetch delete request
 await axiosSecure.delete(`/order/${_id}`)
  // increase qunatity form plant collection
-await axiosSecure.patch(`/plants/quantity/${_id}`,{ quantityToUpdate:quantity,status:'increase' })
+await axiosSecure.patch(`/plants/quantity/${_id}`,{ quantityToUpdate:quantity,status:'increase'})
 // call refetch to ferresh
 refetch()
 toast.success('Order Cancled Confirmed')

@@ -19,28 +19,13 @@ const PopularProduct = () => {
   useEffect(() => {
     const fetchPopularPlants = async () => {
       try {
-        const res = await fetch('https://y-hbahojeoy-sihams-projects-6b0cef74.vercel.app/plants');
-        const plants = await res.json();
-    
-        const ratedPlants = await Promise.all(
-          plants.map(async (plant) => {
-            const res = await fetch(`https://tree-plantnet-server-side-project-fuvb.onrender.com/${plant._id}`);
-            const data = await res.json();
-            return {
-              ...plant,
-              averageRating: data?.averageRating || 0,
-            };
-          })
-        );
-    
-        const filtered = ratedPlants.filter(p => p.averageRating >= 1);
-        setPopularPlants(filtered);
+        const res = await fetch('http://localhost:5000/popular-products');
+        const data = await res.json();
+        setPopularPlants(data); // ✅ ঠিক নাম ব্যবহার করা হয়েছে
       } catch (error) {
         console.error('Failed to fetch popular plants:', error);
       }
     };
-    
-
     fetchPopularPlants();
   }, []);
 

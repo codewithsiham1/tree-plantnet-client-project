@@ -13,7 +13,7 @@ const Allplants = () => {
   const { data: plants = [], isLoading, error } = useQuery({
     queryKey: ['allPlants'],
     queryFn: async () => {
-      const { data } = await axiosSecure.get('/plants');
+      const { data } = await axiosSecure.get('http://localhost:5000/plants');
       return data;
     },
   });

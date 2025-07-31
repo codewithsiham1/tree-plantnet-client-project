@@ -54,8 +54,10 @@ const CustomerReview = () => {
                   {review.userInfo?.name || 'Anonymous'}
                 </h3>
                 <p className="text-xs text-gray-500 mb-1">
-                  {format(new Date(review.createdAt), 'MMMM dd, yyyy')}
-                </p>
+  {review.createdAt && !isNaN(new Date(review.createdAt)) 
+    ? format(new Date(review.createdAt), 'MMMM dd, yyyy') 
+    : 'Date not available'}
+</p>
                 <p className="text-yellow-500 font-semibold mb-1 text-xs">⭐ {review.rating} Stars</p>
                 <p className="text-gray-600 text-xs italic leading-relaxed text-justify max-w-[260px] mx-auto">
                   "{review.comment}"
